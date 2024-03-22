@@ -1,6 +1,11 @@
+<?php 
+    $defaultAvatarDir = 'sources/';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +14,7 @@
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/style.css">
+
 </head>
 <body>
     
@@ -66,6 +72,7 @@
                                 <div class="accordion-item">
                                     <p class="accordion-header">
                                         <button class="accordion-button <?= getUserLoggedInFullname() === 'admin' ? 'bg-danger bg-opacity-50':''; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <img src="<?= $defaultAvatarDir."thumb_default_avatar.jpeg" ?>" alt="#" class="avatar-img" />
                                             @<?= getUserLoggedInFullname() ?>
                                         </button>
                                     </p>

@@ -47,6 +47,10 @@ function userCanUpdate(): bool{
     return  $role === 'admin' || $role === 'editor';
 }
 
+function getUserAvatar(): string{
+    return $_SESSION['userData']['avatar'] ?? '';
+}
+
 function userCanDelete(): bool{
     return  isUserAdmin();
 }
@@ -90,4 +94,27 @@ function formatDate($date){
     }
 
     return $formatted; 
+}
+
+
+function copyAvatar(int $userID)
+{
+    $result = [
+        'success' => false, 
+        'message' => 'PROBLEM SAVING IMAGE'
+    ]; 
+
+    if (empty($_FILES)){
+        $result["message"] = "NO FILE UPLOADED";
+        return $result; 
+    }
+
+    $FILE = $_FILES["avatar"]; 
+
+    if (!is_uploaded_file($FILE['tmp_name'])){
+        $result["message"] = "NO FILE UPLOADED VIA HTTP POST";
+        return $result; 
+    }
+
+    
 }
