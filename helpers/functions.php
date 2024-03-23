@@ -96,25 +96,104 @@ function formatDate($date){
     return $formatted; 
 }
 
+function copyAvatar($file, $userID){
 
-function copyAvatar(int $userID)
-{
     $result = [
-        'success' => false, 
-        'message' => 'PROBLEM SAVING IMAGE'
-    ]; 
+        "success" => false, 
+        "message" => ""
+    ];
 
-    if (empty($_FILES)){
-        $result["message"] = "NO FILE UPLOADED";
-        return $result; 
+    $file_extension = pathinfo($file["name"], PATHINFO_EXTENSION);
+    $filename = $userID."_".str_replace(".", "", microtime(true)).".".$file_extension;
+
+    $avatarDir = "./public/avatar/";
+
+    if (!move_uploaded_file($file['tmp_name'], $avatarDir.$filename)){
+
+        $result = [
+            "success" => false, 
+            "message" => "COULD NOT MOVE UPLOADED FILE"
+        ];  
+
+    } else {
+
+        // update avatar image for thumbnail
+        if ($file_extension === "jpeg" || $file_extension === "jpg"){
+            $newImg = imagecreatefromjpeg($avatarDir.$filename);
+            if (!$newImg){
+                $result = [
+                    "success" => false, 
+                    "message" => "COULD NOT CREATE THUMBNAIL RESOURCE"
+                ]; 
+                return $result; 
+            }
+            $thumbnailImag = imagescale($newImg, 200);
+            if (!$thumbnailImag){
+                $result = [
+                    "success" => false, 
+                    "message" => "COULD NOT SCALE THUMBNAIL RESOURCE"
+                ]; 
+                return $result; 
+            };
+            imagejpeg($thumbnailImag, $avatarDir.'thumb_'.$filename);
+
+            $result = [
+                "success" => true, 
+                "message" => "AVATAR MOVED AND THUMBNAIL CREATED", 
+                "avatar" => 'thumb_'.$filename
+            ]; 
+            return $result; 
+
+        } else {
+            $result = [
+                "success" => false, 
+                "message" => "FILE EXTENSION IS NOT SUPPORTED"
+            ]; 
+            return $result; 
+        }
+
+    };
+};
+
+function deleteOldAvatar($file){
+    $result = [
+        "success" => false, 
+        "message" => ""
+    ];
+
+    $avatarDir = "./public/avatar/";
+
+    // get the original file from thumbnail file
+    $original = str_replace("thumb_", "", $file);
+
+    // define the paths for those two files
+    $filename = $avatarDir.$original; 
+    $filenameThumb = $avatarDir.$file; 
+
+    if (file_exists($filename)){
+        unlink($filename);
+    } else {
+        $result = [
+            "success" => false, 
+            "message" => "The original file doesn't exist"
+        ];
+        return $result;
     }
 
-    $FILE = $_FILES["avatar"]; 
-
-    if (!is_uploaded_file($FILE['tmp_name'])){
-        $result["message"] = "NO FILE UPLOADED VIA HTTP POST";
-        return $result; 
+    if (file_exists($filenameThumb)){
+        unlink($filenameThumb);
+    } else {
+        $result = [
+            "success" => false, 
+            "message" => "The thumbnail file doesn't exist"
+        ];
+        return $result;
     }
 
-    
-}
+    $result = [
+        "success" => true, 
+        "message" => "deleted successfully"
+    ];
+
+    return $result; 
+};

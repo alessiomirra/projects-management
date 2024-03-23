@@ -5,7 +5,7 @@
             <div class="alert alert-success">
                 <?php
                     $link = "/user/edit/".getUserId();
-                    echo 'You have successfully signed up! Go to '."<a href='$link'>Account Settings</a> ".'and set a first and last name';
+                    echo 'You have successfully signed up! Go to '."<a href='$link'>Account Settings</a> ".'and set a first and last name, and an avatar for your account.';
                     $_SESSION['signedUp'] = '';
                 ?>
             </div>

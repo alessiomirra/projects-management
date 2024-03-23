@@ -112,7 +112,7 @@ class User
     {
         $ret = false;
 
-        $sql = "UPDATE user SET username=:username, email=:email, first_name=:first_name, last_name=:last_name ";
+        $sql = "UPDATE user SET username=:username, email=:email, first_name=:first_name, last_name=:last_name, avatar=:avatar ";
         $sql .= " where id=:userID";
 
         $stm = $this->conn->prepare($sql); 
@@ -124,6 +124,7 @@ class User
                 "email" => $post["email"],
                 "first_name" => $post["first_name"],
                 "last_name" => $post["last_name"],
+                "avatar" => $post["avatar"] ?? '',
                 "userID" => $userID
             ]);
 

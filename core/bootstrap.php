@@ -15,3 +15,4 @@ require_once 'app/Models/Task.php';
 require_once 'helpers/functions.php';
 require_once 'config/app.config.php';
 require_once 'core/Router.php';
+

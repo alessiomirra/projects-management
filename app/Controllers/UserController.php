@@ -31,11 +31,17 @@ class UserController extends BaseController
     {   
         $this->redirectIfNotLoggedIn();
 
+        $userData = $_SESSION["userData"];
+
         if (getUserId() == $userID){
             // visitor deleting its own account
             // remember to log out the user and clean the $_SESSION
             $userObj = new User($this->conn); 
             $userObj->deleteAccount($userID);
+
+            if ($userData["avatar"]){
+                deleteOldAvatar($userData["avatar"]);
+            }
 
             // logout the user
             $loginController = new LoginController($this->conn); 
@@ -62,12 +68,25 @@ class UserController extends BaseController
     {
         $this->redirectIfNotLoggedIn();
 
+        $userData = $_SESSION["userData"];
+
         $post = [
             'username' => trim($_POST["username"]) ?? '',
             'email' => trim($_POST["email"]) ?? '',
             'first_name' => trim($_POST["first_name"]) ?? '',
-            'last_name' => trim($_POST["last_name"]) ?? ''
+            'last_name' => trim($_POST["last_name"]) ?? '', 
         ];
+
+        if ($_FILES["avatar"]){
+            if ($userData["avatar"]){
+                deleteOldAvatar($userData["avatar"]);
+            }
+
+            $res = copyAvatar($_FILES["avatar"], $userID);
+            if ($res["success"]){
+                $post["avatar"] = $res["avatar"];
+            }
+        };
 
         $userObj = new User($this->conn); 
         $userObj->edit($post, $userID);

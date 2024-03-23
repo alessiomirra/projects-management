@@ -1,6 +1,14 @@
+<?php 
+    $defaultAvatarDir = '/sources/';
+    $avatarDir = "/avatar/";
+?>
+
 <div class="container py-2">
 
     <ul class="nav container">
+        <li class="nav-item">
+            <img src="<?= !$result->avatar ? $defaultAvatarDir."thumb_default_avatar.jpeg" : $avatarDir.$result->avatar ?>" class="avatar-img me-2"/>
+        </li>
         <li class="nav-item">
             <p class="fs-4 fw-bold">@<?= $result->username ?></p>
         </li>

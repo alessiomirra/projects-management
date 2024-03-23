@@ -1,5 +1,6 @@
 <?php 
-    $defaultAvatarDir = 'sources/';
+    $defaultAvatarDir = '/sources/';
+    $avatarDir = "/avatar/";
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +73,7 @@
                                 <div class="accordion-item">
                                     <p class="accordion-header">
                                         <button class="accordion-button <?= getUserLoggedInFullname() === 'admin' ? 'bg-danger bg-opacity-50':''; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            <img src="<?= $defaultAvatarDir."thumb_default_avatar.jpeg" ?>" alt="#" class="avatar-img" />
+                                            <img src="<?= getUserAvatar() === "" ? $defaultAvatarDir."thumb_default_avatar.jpeg" : $avatarDir.getUserAvatar() ?>" alt="#" class="avatar-img me-2" />
                                             @<?= getUserLoggedInFullname() ?>
                                         </button>
                                     </p>
@@ -158,6 +159,7 @@
                         <div class="accordion-item">
                             <p class="accordion-header">
                                 <button class="accordion-button <?= getUserLoggedInFullname() === 'admin' ? 'bg-danger bg-opacity-50':''; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                    <img src="<?= getUserAvatar() === "" ? $defaultAvatarDir."thumb_default_avatar.jpeg" : $avatarDir.getUserAvatar() ?>" alt="#" class="avatar-img me-2" />
                                     @<?= getUserLoggedInFullname() ?>
                                 </button>
                             </p>
