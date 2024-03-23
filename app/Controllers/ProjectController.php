@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Project;
 use App\Models\Task; 
 use App\Models\User; 
+use App\Models\File; 
 
 use PDO; 
 
@@ -36,13 +37,16 @@ class ProjectController extends BaseController
         $tasksObj = new Task($this->conn);
         $tasks = $tasksObj->getProjectTasks($projectID);
 
+        $filesObj = new File($this->conn);
+        $files = $filesObj->getProjectFiles($projectID);
+
         $partecipants = [];
 
         foreach($tasks as $task){
             $partecipants[] = $task->username;
         }
 
-        $this->content = view('project', compact('project', 'tasks', 'partecipants'));
+        $this->content = view('project', compact('project', 'tasks', 'files', 'partecipants'));
     }
 
     public function create() :void 
@@ -205,5 +209,58 @@ class ProjectController extends BaseController
         redirect('/project/'.$task->project_id);
     }
     
+    public function saveFile(int $projectID, int $userID) :void 
+    {
+        $this->redirectIfNotLoggedIn();
+
+        $data = [
+            "project_id" => $projectID, 
+            "user_id" => $userID
+        ]; 
+
+        if (isset($_FILES["resource"])){
+            $file = $_FILES["resource"];
+
+            $file_extension = pathinfo($file["name"], PATHINFO_EXTENSION);
+            $filename = $userID."_project".$projectID."_".str_replace(".", "", microtime(true)).".".$file_extension;
+
+            moveFile($file, $projectID, $userID, $filename, $file_extension);
+
+            $data["file"] = $filename;
+            $data["extension"] = $file_extension;
+        }
+
+        $data["description"] = trim($_POST["description"]) ?? "";
+
+        $fileObj = new File($this->conn);
+        $fileObj->saveFile($data);
+
+        redirect('/project/'.$projectID);
+    }
+
+    public function showFile($fileID){
+        $fileObj = new File($this->conn); 
+        $file = $fileObj->getFileByID($fileID);
+
+        $this->content = view('fileView', compact('file'), $this->tplDir);
+    }
+
+    public function deleteFile($fileID){
+        $fileObj = new File($this->conn); 
+        $file = $fileObj->getFileByID($fileID);
+
+        if ($file){
+            deleteFile($file);
+            $res = $fileObj->delete($file->id);
+            if ($res) {
+                redirect('/project/'.$file->project_id);
+            } else {
+                echo "Something went wrong"; 
+                die; 
+            }
+        }
+
+    }
+
 }
 

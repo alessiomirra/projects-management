@@ -1,3 +1,5 @@
 notes.txt
 public/avatar/*
 !public/avatar/
+public/uploads/*
+!public/uploads/

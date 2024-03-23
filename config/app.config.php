@@ -16,7 +16,8 @@ return [
             'project/create' => [ProjectController::class, 'create'], 
             'project/:id/edit' => [ProjectController::class, 'edit'],
             'project/:id/new-task' => [ProjectController::class, 'createTask'],
-            'project/:projectID/task/:taskID' => [ProjectController::class, 'editTask']
+            'project/:projectID/task/:taskID' => [ProjectController::class, 'editTask'], 
+            'file/:fileID' => [ProjectController::class, 'showFile']
         ], 
         'POST' => [
             'login' => [LoginController::class, 'login'], 
@@ -31,6 +32,8 @@ return [
             'task/:taskID/completed' => [ProjectController::class, 'completedTask'],
             'delete-account/:userID' => [UserController::class, 'deleteAccount'],
             'user/edit/:id' => [UserController::class, 'edit'],
+            'addFile/:projectID/:userID' => [ProjectController::class, 'saveFile'], 
+            'file/delete/:fileID' => [ProjectController::class, 'deleteFile']
         ]
     ]
 ];

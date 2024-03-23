@@ -197,3 +197,55 @@ function deleteOldAvatar($file){
 
     return $result; 
 };
+
+function moveFile($file, $projectID, $userID, $file_name, $file_extension)
+{
+    $result = [
+        "success" => false, 
+        "message" => ""
+    ]; 
+
+    $uploadsDir = "./public/uploads/";
+
+    if (!move_uploaded_file($file['tmp_name'], $uploadsDir.$file_name)){
+        $result = [
+            "success" => false, 
+            "message" => "COULD NOT MOVE UPLOADED FILE"
+        ]; 
+        return $result;
+    } else {
+        $result = [
+            "success" => true, 
+            "message" => "FILE MOVED"
+        ]; 
+        return $result;
+    }
+};
+
+function deleteFile($file){
+    $result = [
+        "success" => false, 
+        "message" => ""
+    ];
+
+    $uploadsDir = "./public/uploads/";
+    $filename = $uploadsDir.$file->path; 
+
+    if (file_exists($filename)){
+        unlink($filename);
+    } else {
+        $result = [
+            "success" => false, 
+            "message" => "The original file doesn't exist"
+        ];
+        return $result;
+    }
+
+    $result = [
+        "success" => true, 
+        "message" => "deleted successfully"
+    ];
+
+    return $result; 
+
+};

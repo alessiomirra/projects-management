@@ -21,6 +21,7 @@
             <p class="text-muted"><?= count($tasks); ?> TASKS</p>
         </div>
     </div>
+
     <p><?= $project->description ?></p>
 
     <div class="container border rounded-3 py-2">
@@ -99,12 +100,85 @@
     <hr>
     
     <?php if(count($tasks)): ?>
-    <p><span class="fw-bold">PARTECIPANTS:</span></p>
-    <p>
-        <?php foreach($partecipants as $partecipant) ?>
-            <a class="me-2" href="/user/<?= $partecipant ?>">@<?= $partecipant ?></a>
-        <?php ?>
-    </p>
+        <p><span class="fw-bold">PARTECIPANTS:</span></p>
+        <p>
+            <?php foreach($partecipants as $partecipant) ?>
+                <a class="me-2" href="/user/<?= $partecipant ?>">@<?= $partecipant ?></a>
+            <?php ?>
+        </p>
+    <?php endif; ?>
+    
+    <hr>
+
+    <p><span class="fw-bold">PROJECT'S RESOURCES</span></p>
+
+    <!-- Add file resource form --> 
+    <?php if ((in_array(getUserUsername(), $partecipants) || userCanManageProject($project->username)) && isUserLoggedIn()): ?>
+        <div class="mb-3">
+            <a class="btn btn-sm btn-outline-primary" data-bs-toggle="collapse" href="#fileForm" role="button" aria-expanded="false" aria-controls="fileForm">
+                + ADD A RESOURCE
+            </a>
+            <div class="collapse" id="fileForm">
+                <div class="card card-body">
+                    
+                    <form action="/addFile/<?= $project->id ?>/<?= $_SESSION["userData"]["id"] ?>" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <input type="file" class="form-control" id="fileInput" name="resource" accept=".jpeg, .jpg, .pdf" required>
+                            </div>
+                            <div class="col-md-7 mb-3">
+                                <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">SAVE</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+    <!---->
+    
+    <?php if (count($files)): ?>
+        <div class="table-responsive-md">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">FILE</th>
+                        <th scope="col">DESCRIPTION</th>
+                        <th scope="col">TYPE</th>
+                        <th scope="col">OWNER</th>
+                        <th scope="col">DATE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach($files as $file){ ?>
+                        <tr>
+                            <td><a href="/file/<?= $file->id ?>" class="text-decoration-none"><?= $file->path ?></a></td>
+                            <td><?= $file->description ?></td>
+                            <td><?= $file->extension ?></td>
+                            <td><a href="/user/<?= $file->username ?>" class="text-decoration-none">@<?= $file->username ?></a></td>
+                            <td><?= $file->timestamp ?></td>
+                            <?php  if ($file->user_id === getUserId() || isUserAdmin()): ?>
+                                <td>
+                                    <form action="#" method="POST">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">DELETE</button>
+                                    </form>
+                                </td>
+                            <?php  endif; ?>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+
+        </div>
+    <?php else: ?>
+        <div class="text-center">
+            <p>No resources for that project</p>
+        </div>
     <?php endif; ?>
 
 </div>

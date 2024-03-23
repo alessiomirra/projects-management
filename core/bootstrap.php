@@ -12,6 +12,7 @@ require_once 'db/DbFactory.php';
 require_once 'app/Models/User.php';
 require_once 'app/Models/Project.php';
 require_once 'app/Models/Task.php';
+require_once 'app/Models/File.php';
 require_once 'helpers/functions.php';
 require_once 'config/app.config.php';
 require_once 'core/Router.php';
