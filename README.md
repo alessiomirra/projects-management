@@ -1,0 +1,1 @@
+Add a directory called "avatar" in /public
