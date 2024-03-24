@@ -1,4 +1,5 @@
 notes.txt
+config/database.php 
 public/avatar/*
 !public/avatar/
 public/uploads/*
