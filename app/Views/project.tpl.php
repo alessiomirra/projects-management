@@ -164,7 +164,7 @@
                             <td><?= $file->timestamp ?></td>
                             <?php  if ($file->user_id === getUserId() || isUserAdmin()): ?>
                                 <td>
-                                    <form action="#" method="POST">
+                                    <form action="/file/delete/<?= $file->id ?>" method="POST">
                                         <button type="submit" class="btn btn-sm btn-outline-danger">DELETE</button>
                                     </form>
                                 </td>
