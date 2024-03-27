@@ -16,6 +16,16 @@ class UserController extends BaseController
         parent::__construct($conn);
     }
 
+    public function usersList() :void 
+    {
+        $this->redirectIfNotLoggedIn();
+
+        $userObj = new User($this->conn);
+        $users = $userObj->getAll();
+
+        $this->content = view('usersList', compact("users"));
+    }
+
     public function userPage(string $username) :void 
     {
         $user = new User($this->conn);

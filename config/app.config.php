@@ -12,13 +12,14 @@ return [
             "signup" => [LoginController::class, 'showSignUp'], 
             'user/:username' => [UserController::class, 'userPage'],
             'user/edit/:id' => [UserController::class, 'editAccount'],
+            'users' => [UserController::class, 'usersList'], 
             'project/:id' => [ProjectController::class, 'getProject'],
             'project/create' => [ProjectController::class, 'create'], 
             'project/:id/edit' => [ProjectController::class, 'edit'],
             'project/:id/new-task' => [ProjectController::class, 'createTask'],
             'project/:projectID/task/:taskID' => [ProjectController::class, 'editTask'], 
-            'file/:fileID' => [ProjectController::class, 'showFile']
-        ], 
+            'file/:fileID' => [ProjectController::class, 'showFile'], 
+            ], 
         'POST' => [
             'login' => [LoginController::class, 'login'], 
             'signup' => [LoginController::class, 'signup'],
@@ -34,6 +35,9 @@ return [
             'user/edit/:id' => [UserController::class, 'edit'],
             'addFile/:projectID/:userID' => [ProjectController::class, 'saveFile'], 
             'file/delete/:fileID' => [ProjectController::class, 'deleteFile']
-        ]
+            ]
+        ], 
+    "page" => [
+        "recordsPerPage" => 12, 
     ]
 ];

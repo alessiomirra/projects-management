@@ -9,12 +9,37 @@ class Project
     public function __construct(protected PDO $conn)
     {}
 
-    public function all() :array 
+    public function getCount() :int 
+    {
+        $total = 0;
+
+        $sql = "SELECT COUNT(*) AS total FROM projects";
+
+        $stm = $this->conn->query($sql);
+        if ($stm && $stm->rowCount()) {
+            $result = $stm->fetch(PDO::FETCH_OBJ);
+            $total = $result->total;
+        };
+
+        return $total; 
+    }
+
+    public function getProjects(array $params = []) :array 
     {
         $result = [];
 
-        $sql = 'select p.*, u.username, u.email from projects as p INNER JOIN user as u';
-        $sql .= ' ON u.id=p.user_id ORDER BY p.id DESC';
+        $search = $params["search"];
+        $start = $params["start"];
+        $limit = $params["limit"];
+
+        $sql = 'select p.*, u.username, u.email from projects as p INNER JOIN user as u ON u.id=p.user_id';
+        if ($search){
+            $sql .= " WHERE p.name LIKE '%$search%'";
+            $sql .= " OR u.username LIKE '%$search%'";
+        }
+        $sql .= ' ORDER BY p.id DESC';
+        $sql .= " LIMIT $start, $limit";
+
         $stm = $this->conn->query($sql);
         if ($stm && $stm->rowCount()) {
             $result = $stm->fetchAll();

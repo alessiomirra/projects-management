@@ -62,6 +62,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-white <?= $_SERVER['REQUEST_URI'] === '/users' ? 'fw-bold' : '' ?>" href="/users"><i class="bi bi-people"></i> Users</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-white" href="#"><i class="bi bi-calendar"></i> Calendar</a>
                         </li>
 

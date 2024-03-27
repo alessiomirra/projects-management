@@ -1,7 +1,16 @@
 <?php 
 
-function view(string $view,array $data = [], string $viewDir = 'app/Views/'): string {
+function dd(...$data): void {
+    var_dump($data);
+    die;
     
+}
+
+function getParams($param, $default=null){
+    return !empty($_REQUEST[$param])? $_REQUEST[$param]: $default;
+}
+
+function view(string $view,array $data = [], string $viewDir = 'app/Views/'): string {
     extract($data, EXTR_OVERWRITE);
 
      ob_start();
@@ -9,12 +18,6 @@ function view(string $view,array $data = [], string $viewDir = 'app/Views/'): st
         $content = ob_get_contents();
         ob_end_clean();
         return $content;
-}
-
-function dd(...$data): void {
-    var_dump($data);
-    die;
-    
 }
 
 function redirect(string $url = '/'): void {

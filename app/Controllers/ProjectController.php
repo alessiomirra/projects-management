@@ -12,20 +12,44 @@ use PDO;
 class ProjectController extends BaseController
 {
     protected Project $project; 
+    protected array $configs; 
 
     public function __construct(
         protected ?PDO $conn
     ){
         parent::__construct($conn);
         $this->project = new Project($conn);
+
+        $this->configs = require("./config/app.config.php");
     }
 
     public function home() :void 
     {
         $this->redirectIfNotLoggedIn();
 
-        $projects = $this->project->all();
-        $this->content = view('home', compact('projects'), $this->tplDir);
+        // check if there are parameters passed as querystrings
+
+        $search = $_REQUEST["search"] ?? "";
+
+        $page = isset($_REQUEST["page"]) ? (int) $_REQUEST["page"] : 1;
+        $limit = (int) $this->configs["page"]["recordsPerPage"];
+        $start = $limit * ($page - 1);
+        if ($start < 0){
+            $start = 0;
+        }
+
+        $params = [
+            "search" => $search, 
+            "page" => $page, 
+            "start" => $start, 
+            "limit" => $limit, 
+        ]; 
+
+        $total = $this->project->getCount();
+
+        $projects = $this->project->getProjects($params);
+
+        $this->content = view('home', compact('projects', 'total', 'search', 'page'), $this->tplDir);
     }
 
     public function getProject(int $projectID) :void 
